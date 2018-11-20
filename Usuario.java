@@ -61,6 +61,28 @@ public class Usuario {
 	 * }
 	 */
 
+/**
+*public void sendSignal(){
+*	if(alarm = TRUE){
+*		if(this.mibanco = bank){
+*			paciencia.add(2);
+*					}
+*		else{
+*			paciencia.add(1);
+*					}
+*			}
+*	else{
+*		if(this.mibanco =! bank) {
+*			paciencia.add(-1);
+*					}
+*		else{
+*			paciencia.add(-2);
+*					}
+*		}
+*			}
+*
+*/
+
 	
 
 
