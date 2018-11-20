@@ -1,5 +1,7 @@
 package bankRuns;
 
+import java.util.ArrayList;
+
 import cern.jet.random.ChiSquare;
 import repast.simphony.engine.environment.RunEnvironment;
 import repast.simphony.random.RandomHelper;
@@ -30,12 +32,61 @@ public class Usuario {
 		this.miBanco = bank;
 		
 		
-	ChiSquare(double) r = RandomHelper.createChiSquare(4);
-	if (r<1) {
+		
+	
+	}
+	
+	ArrayList<Usuario> miRed = new ArrayList<Usuario>();
+	public void agregarContacto(Usuario nuevoContacto){
+		if(! miRed.contains(nuevoContacto)) {	
+		
+		miRed.add(nuevoContacto);}
+		
+		nuevoContacto.agregarContacto(this);}
+	
+public Usuario buscarcontacto() {
+		//buscar en el ArrayList miRed buscar aleatoriamente una persona diefreneta la que ya está buscando.
+	}
+	
+	public void agregarContactos() {
+		while (miRed.size()<conectividad) {
+			Usuario nuevoContacto = buscarContacto();
+			agregarContacto(nuevoContacto);
+		}
 		
 	}
 	
+	ArrayList<Usuario> paciencia = new ArrayList<Usuario>();
+	public void sendSignal(){
+		if(alarm = true){
+			if(this.miBanco = bank){
+				paciencia.add(2);
+						}
+			else{
+				paciencia.add(1);
+						}
+				}
+		else{
+			if(this.miBanco =! bank) { 
+				paciencia.add(-1);
+						}
+			else{
+				paciencia.add(-2);
+						}
+	}
+	}
+	
+	/**
+	 * Asignacion de fondos para cada individuo con base en una distribución sesgada ala derecha
+	 */
+//ChiSquare(double) r = RandomHelper.createChiSquare(4);
+//if (r<1) {
 
+	
+	public void getPaciencia() {
+		// TODO Auto-generated method stub
+		
+	}
 	
 		//defineTipoUsuario();	
 	}
@@ -43,12 +94,7 @@ public class Usuario {
 	//public Usuario(String bank) {
 		//this.miBanco = bank;
 		
-		//double r = RandomHelper.nextIntFromTo(0, 1);
-		
-		
-		
-	}
-
+		//double r = RandomHelper.createPoisson(3).nextDouble();
 
 //Usuario
 	
@@ -61,28 +107,24 @@ public class Usuario {
 	 * }
 	 */
 
-/**
-*public void sendSignal(){
-*	if(alarm = TRUE){
-*		if(this.mibanco = bank){
-*			paciencia.add(2);
-*					}
-*		else{
-*			paciencia.add(1);
-*					}
-*			}
-*	else{
-*		if(this.mibanco =! bank) {
-*			paciencia.add(-1);
-*					}
-*		else{
-*			paciencia.add(-2);
-*					}
-*		}
-*			}
-*
-*/
-
 	
 
+ /**
+  * @SCHEDULED METHOD(start=1, interval=1, shuffle=true,priority=50)
+  * if (fondos>0){
+  * 	for (especulador = true ){
+  * 		sendSignal();}
+  * 	setPaciencia();
+  * 	if (nivel>umbral){
+  * 		getReservas(); 
+  * 		if (reservasTotales<fondos){
+  * 			alarm = true; }
+  * 		else {alarm = false}
+  * 		sendSignal();
+  * 		setPaciencia();
+  * 
+  * 				
+  * 			 
+  * 
+  */
 

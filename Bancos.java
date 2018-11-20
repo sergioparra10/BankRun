@@ -36,6 +36,22 @@ public class Bancos {
 	/**
 	 * reservasTotales = (capital *(reservasExceso+reservasRequeridas))
 	 * 
+	 * public void setReservas(){
+	 * 	if (idBank == bank) {
+	 * 		if(reservasTotales<fondos){
+	 * 			iliquido=true;
+	 * 			}
+	 * 		else {capital == capital-fondos;}
+	 * 	else { null}
+	 * 	
+	 */
+	// Método para cerrar el banco
+	
+	/**
+	 * public void () {
+	 * 
+	 * 	for (iliquido = true){
+	 * 		Cambiar el color del banco una vez que haya quebrado}}
 	 */
 	
 	
