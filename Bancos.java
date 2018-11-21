@@ -1,5 +1,7 @@
 package bankRuns;
 
+import java.util.ArrayList;
+
 import repast.simphony.space.continuous.ContinuousSpace;
 
 public class Bancos {
@@ -15,36 +17,34 @@ public class Bancos {
 	
 
 	
-	public Bancos (String idB) {
+	public Bancos (String idB, double capital) {
 		this.idBanco = idB;
+		this.capital = capital;
 		
 	}
 	
-	//Banco 
-	/**
-	 * ArrayList<Bancos> misUsuarios = new ArrayList<Bancos>();
-	 * public void set.capital(){
-	 * if (idBanco==bank){
-	 * add.misUsuarios(fondos);}
-	 * else{add.misUsuarios(NULL);}
-	 * for(double c:misUsuarios){
-	 * capital += c;}
-	 * }
-	 */
+	ArrayList<Bancos> misUsuarios = new ArrayList<Bancos>();
+	  public void set.capital(){
+		  if (idBanco==bank){
+			  add.misUsuarios(double fondos);} // como extarer los fondos de la clase suuario para usar con la clase bancos
+		  for(double c:misUsuarios){
+		      capital += c;}
+	
+	
+	  }
+	 
 	
 	//Banco establecer el nexo entre usuarios y bancos
-	/**
-	 * reservasTotales = (capital *(reservasExceso+reservasRequeridas))
-	 * 
-	 * public void setReservas(){
-	 * 	if (idBank == bank) {
-	 * 		if(reservasTotales<fondos){
-	 * 			iliquido=true;
-	 * 			}
-	 * 		else {capital == capital-fondos;}
-	 * 	else { null}
-	 * 	
-	 */
+	 reservasTotales = (this.capital *(this.reservasExceso+this.reservasRequeridas))
+	  
+	  public void setReservas(double retiro){
+	  		this.capital = this.capital - retiro;
+	  	if (this.idBanco == this.miBanco) {
+	  		if(this.reservasTotales < fondos){
+	  			iliquido=true;
+	  			}
+	  		else {this.capital = this.capital-this.fondos;}
+	  	
 	// Método para cerrar el banco
 	
 	/**

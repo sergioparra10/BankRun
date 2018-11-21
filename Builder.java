@@ -25,13 +25,11 @@ public class Builder implements ContextBuilder<Object>{
 		
 		int dimensionY = 75;
 		int dimensionX = 75;  
-		Parameters params = RunEnvironment.getInstance().getParameters();
-		
 		
 		ContinuousSpaceFactory spaceFactory = ContinuousSpaceFactoryFinder.createContinuousSpaceFactory(null);
 		ContinuousSpace<Object> space = spaceFactory.createContinuousSpace("miMundo", context, new RandomCartesianAdder<Object>(), new repast.simphony.space.continuous.StrictBorders(), dimensionX,dimensionY);
 		/**
-		 * por el momento estableceremos el numero e usuarios en miMundo a 100 pero se planea que pueda ser un parametro ajustable por el el usuario 
+		 * por el momento estableceremos el numero de usuarios en miMundo a 100 pero se planea que pueda ser un parametro ajustable por el el usuario 
 		 */
 		int usuarioCount = 100;
 		for (int i=0; i<usuarioCount; i++) {
@@ -53,9 +51,9 @@ public class Builder implements ContextBuilder<Object>{
 			
 		}
 			context.add(new Bancos ("A"));
-			context.add(new Bancos("B"));
+			context.add(new Bancos ("B"));
 			context.add(new Bancos ("C"));
-			context.add(new Bancos("D"));
+			context.add(new Bancos ("D"));
 		
 		/**
 		 * Agregamos 4 tipos de banco, posteriormente, el tamaño de cada uno se va a 

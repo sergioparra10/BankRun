@@ -4,12 +4,14 @@ import java.util.ArrayList;
 
 import cern.jet.random.ChiSquare;
 import repast.simphony.engine.environment.RunEnvironment;
+import repast.simphony.engine.schedule.ScheduledMethod;
+import repast.simphony.parameter.Parameters;
 import repast.simphony.random.RandomHelper;
 import repast.simphony.space.continuous.ContinuousSpace;
 
 public class Usuario {
 	int idUsuario;
-	int fondos;
+	double fondos;
 	int umbral;
 	int conectividad;
 	boolean retiro;
@@ -17,24 +19,55 @@ public class Usuario {
 	boolean especular;
 	boolean propio;
 	String miBanco;
+	int highBadSignal = 2;
+	int lowBadSignal = 1;
+	int lowGoodSignal = -1;
+	int highGoodSignal = -2;
+	static int classID =1;
+	
+	Parameters params = RunEnvironment.getInstance().getParameters();
+	int maxUmbral=params.getInteger("Valor maximo del umbral");
+	int maxConect=params.getInteger("Valor maximo para el indice de conectividad");
+	
 	
 	public ContinuousSpace<Object> space;
 	
-	public Usuario(int idU, int fon, int umb, int conect, boolean ret, boolean ala, boolean espe, boolean prop, String bank) {
-		this.idUsuario =idU;
-		this.fondos = fon;
-		this.umbral = umb;
-		this.conectividad = conect;
+	public Usuario(int conect, boolean ret, boolean ala, boolean espe, boolean prop, String bank) {
+		this.miBanco = bank;
+		this.idUsuario = classID;
+		classID ++;
+		this.umbral = RandomHelper.nextIntFromTo(1, maxUmbral);
+		this.conectividad = RandomHelper.nextIntFromTo(1, maxConect);
 		this.retiro = ret;
 		this.alarm = ala;
 		this.especular = espe;
 		this.propio = prop;
-		this.miBanco = bank;
 		
 		
 		
 	
 	}
+	
+	public double misFondos() {
+		this.fondos = RandomHelper.createChiSquare(3).nextDouble();
+		return this.fondos;
+	}
+	
+	@ScheduledMethod (start=1, interval=1, priority = 1000)
+	public void setValorInicial () {
+		
+		
+	}
+	
+	
+	/**Propuesta para el Metodo de fondos, o cómo adquieren sus fondos inciales los usarios
+	 * Queremos simular una distribución ChiSquare
+	 * 
+	 * public double fondos() {
+	 * 		return RandomHelper.createChiSquare(double freedom)                               //cómo hacer que sea chiSquare??
+	 * 		}
+	 * 
+	 */
 	
 	ArrayList<Usuario> miRed = new ArrayList<Usuario>();
 	public void agregarContacto(Usuario nuevoContacto){
@@ -44,11 +77,12 @@ public class Usuario {
 		
 		nuevoContacto.agregarContacto(this);}
 	
-public Usuario buscarcontacto() {
-		//buscar en el ArrayList miRed buscar aleatoriamente una persona diefreneta la que ya está buscando.
+	public void buscarContacto () {
+		Usuario nuevoContacto = RandomHelper.nextInt(this.idUsuario);
+		
 	}
+		public void agregarContactos() {
 	
-	public void agregarContactos() {
 		while (miRed.size()<conectividad) {
 			Usuario nuevoContacto = buscarContacto();
 			agregarContacto(nuevoContacto);
@@ -59,19 +93,19 @@ public Usuario buscarcontacto() {
 	ArrayList<Usuario> paciencia = new ArrayList<Usuario>();
 	public void sendSignal(){
 		if(alarm = true){
-			if(this.miBanco = bank){
-				paciencia.add(2);
+			if(this.miBanco = bank){ //TODO: encontrar como extraer el banco al que pertenece el otro individuo o "Contacto"
+				paciencia.add(highBadSignal);
 						}
 			else{
-				paciencia.add(1);
+				paciencia.add(lowBadSignal);
 						}
 				}
 		else{
-			if(this.miBanco =! bank) { 
-				paciencia.add(-1);
+			if(this.miBanco =! this.id) { 
+				paciencia.add(lowGoodSignal);
 						}
 			else{
-				paciencia.add(-2);
+				paciencia.add(highGoodSignal);
 						}
 	}
 	}
@@ -111,8 +145,10 @@ public Usuario buscarcontacto() {
 
  /**
   * @SCHEDULED METHOD(start=1, interval=1, shuffle=true,priority=50)
-  * if (fondos>0){
-  * 	for (especulador = true ){
+  * 
+  * public void rutina(){
+  * if (this.fondos>0){
+  * 	if (this.especulador = true ) // buscar un end para periodo 2 {
   * 		sendSignal();}
   * 	setPaciencia();
   * 	if (nivel>umbral){
