@@ -8,30 +8,31 @@ public class Bancos {
 	String idBanco;
 	double resReq;
 	double resExe;
-	double resTot;
+	double resTot = (this.capital *(this.resExe + this.resReq));
 	double capital;
 	boolean iliquido;
 	public Usuario miBanco;
 	public Usuario fondos;
-	double reservasTotales = (this.capital *(this.resExe + this.resReq));
+	public Usuario propio;
 	
 	
 	public ContinuousSpace<Object> space;
 	
 
 	
-	public Bancos (String idB, double capital) {
+	public Bancos (String idB) {
 		this.idBanco = idB;
-		this.capital = capital;
+		
 		
 	}
 	
 	ArrayList<Bancos> misUsuarios = new ArrayList<Bancos>();
 	  public void set.capital(){
-		  if (this.idBanco == this.miBanco){
-			  misUsuarios.add(this.fondos);} // como extarer los fondos de la clase suuario para usar con la clase bancos
+		  if (this.propio = true){
+			  misUsuarios.add(this.fondos); // como extarer los fondos de la clase suuario para usar con la clase bancos
 		  for(double c:misUsuarios){
-		      capital += c;}
+		      this.capital += c;}
+		  }
 	
 	
 	  }
@@ -40,12 +41,22 @@ public class Bancos {
 	//Banco establecer el nexo entre usuarios y bancos
 	  
 	  public void setReservas(double retiro){
-	  		this.capital = this.capital - retiro;
-	  	if (this.idBanco = this.miBanco) {
-	  		if(this.reservasTotales < this.fondos){
+	  	if (this.propio = true) {
+	  		if(this.resTot < this.fondos){
 	  			iliquido=true;
+	  			this.resTot = this.resTot - this.fondos;
 	  			}
 	  		else {this.resTot = this.resTot - this.fondos;}
+	  	} 
+	  }
+	  
+	  public void cerrar() {
+		  if (this.iliquido = true) {
+			  //cambiar forma imagen o color del banco
+		  }
+	  }
+}
+	  
 	  	
 	// Método para cerrar el banco
 	
@@ -57,4 +68,4 @@ public class Bancos {
 	 */
 	
 	
-}
+

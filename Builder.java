@@ -15,12 +15,11 @@ public class Builder implements ContextBuilder<Object>{
 	@Override
 	public Context build(Context<Object> context) {
 		
-		NetworkBuilder <Object> netBuilder = new NetworkBuilder <Object>
-		("socialNetwork", context, true);
-		netBuilder.buildNetwork();
-		/**
-		 *El setting para el modelo sera en un espacio continuo de 75*75 denominado miMundo
-		 */
+		//NetworkBuilder <Object> netBuilder = new NetworkBuilder <Object>
+		//("socialNetwork", context, true);
+		//netBuilder.buildNetwork();
+		
+		/** El setting para el modelo sera en un espacio continuo de 75*75 denominado miMundo */
 		context.setId("modeloBankRuns");
 		
 		int dimensionY = 75;

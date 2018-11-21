@@ -26,7 +26,7 @@ public class Usuario {
 	int highGoodSignal = -2;
 	static int classID =1;
 	int t=1;
-	public Bancos reservasTotales;
+	public Bancos resTot;
 	
 	Parameters params = RunEnvironment.getInstance().getParameters();
 	int maxUmbral=params.getInteger("Valor maximo del umbral");
@@ -75,7 +75,7 @@ public class Usuario {
 	}
 	
 	public void quiebra() {
-		if (this.fondos < this.reservasTotales) {
+		if (this.fondos < this.resTot) {
 			this.alarm = true;
 		}
 	}
@@ -128,12 +128,6 @@ public class Usuario {
 	/**
 	 * Asignacion de fondos para cada individuo con base en una distribución sesgada ala derecha
 	 */
-//ChiSquare(double) r = RandomHelper.createChiSquare(4);
-//if (r<1) {
-
-	
-
-		//defineTipoUsuario();	
 	}
 	
 	//public Usuario(String bank) {
