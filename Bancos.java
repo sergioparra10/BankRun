@@ -11,6 +11,9 @@ public class Bancos {
 	double resTot;
 	double capital;
 	boolean iliquido;
+	public Usuario miBanco;
+	public Usuario fondos;
+	double reservasTotales = (this.capital *(this.resExe + this.resReq));
 	
 	
 	public ContinuousSpace<Object> space;
@@ -25,8 +28,8 @@ public class Bancos {
 	
 	ArrayList<Bancos> misUsuarios = new ArrayList<Bancos>();
 	  public void set.capital(){
-		  if (idBanco==bank){
-			  add.misUsuarios(double fondos);} // como extarer los fondos de la clase suuario para usar con la clase bancos
+		  if (this.idBanco == this.miBanco){
+			  misUsuarios.add(this.fondos);} // como extarer los fondos de la clase suuario para usar con la clase bancos
 		  for(double c:misUsuarios){
 		      capital += c;}
 	
@@ -35,15 +38,14 @@ public class Bancos {
 	 
 	
 	//Banco establecer el nexo entre usuarios y bancos
-	 reservasTotales = (this.capital *(this.reservasExceso+this.reservasRequeridas))
 	  
 	  public void setReservas(double retiro){
 	  		this.capital = this.capital - retiro;
-	  	if (this.idBanco == this.miBanco) {
-	  		if(this.reservasTotales < fondos){
+	  	if (this.idBanco = this.miBanco) {
+	  		if(this.reservasTotales < this.fondos){
 	  			iliquido=true;
 	  			}
-	  		else {this.capital = this.capital-this.fondos;}
+	  		else {this.resTot = this.resTot - this.fondos;}
 	  	
 	// Método para cerrar el banco
 	

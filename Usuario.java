@@ -19,11 +19,14 @@ public class Usuario {
 	boolean especular;
 	boolean propio;
 	String miBanco;
+	public Bancos idBanco;
 	int highBadSignal = 2;
 	int lowBadSignal = 1;
 	int lowGoodSignal = -1;
 	int highGoodSignal = -2;
 	static int classID =1;
+	int t=1;
+	public Bancos reservasTotales;
 	
 	Parameters params = RunEnvironment.getInstance().getParameters();
 	int maxUmbral=params.getInteger("Valor maximo del umbral");
@@ -43,9 +46,6 @@ public class Usuario {
 		this.especular = espe;
 		this.propio = prop;
 		
-		
-		
-	
 	}
 	
 	public double misFondos() {
@@ -55,19 +55,31 @@ public class Usuario {
 	
 	@ScheduledMethod (start=1, interval=1, priority = 1000)
 	public void setValorInicial () {
+		if (t==1) {
+			if(this.t==1) {
+				this.fondos=this.misFondos();		//revisado
+				}
+				this.t++;
+		}
 		
 		
 	}
 	
+	public void bankMatch() {
+		if (this.miBanco = this.idBanco) {
+			this.propio = true;
+		}
+		else {
+			this.propio = false;
+		}
+	}
 	
-	/**Propuesta para el Metodo de fondos, o cómo adquieren sus fondos inciales los usarios
-	 * Queremos simular una distribución ChiSquare
-	 * 
-	 * public double fondos() {
-	 * 		return RandomHelper.createChiSquare(double freedom)                               //cómo hacer que sea chiSquare??
-	 * 		}
-	 * 
-	 */
+	public void quiebra() {
+		if (this.fondos < this.reservasTotales) {
+			this.alarm = true;
+		}
+	}
+
 	
 	ArrayList<Usuario> miRed = new ArrayList<Usuario>();
 	public void agregarContacto(Usuario nuevoContacto){
@@ -77,9 +89,12 @@ public class Usuario {
 		
 		nuevoContacto.agregarContacto(this);}
 	
-	public void buscarContacto () {
-		Usuario nuevoContacto = RandomHelper.nextInt(this.idUsuario);
-		
+	public int buscarContacto() {
+		int g = RandomHelper.nextIntFromTo(1, 100);
+		if (this.idUsuario == g) {
+			return g;
+			
+		}
 	}
 		public void agregarContactos() {
 	
@@ -93,7 +108,7 @@ public class Usuario {
 	ArrayList<Usuario> paciencia = new ArrayList<Usuario>();
 	public void sendSignal(){
 		if(alarm = true){
-			if(this.miBanco = bank){ //TODO: encontrar como extraer el banco al que pertenece el otro individuo o "Contacto"
+			if(this.miBanco = this.idBanco){ //TODO: encontrar como extraer el banco al que pertenece el otro individuo o "Contacto"
 				paciencia.add(highBadSignal);
 						}
 			else{
@@ -101,7 +116,7 @@ public class Usuario {
 						}
 				}
 		else{
-			if(this.miBanco =! this.id) { 
+			if(this.miBanco = this.idBanco) { 
 				paciencia.add(lowGoodSignal);
 						}
 			else{
@@ -117,11 +132,7 @@ public class Usuario {
 //if (r<1) {
 
 	
-	public void getPaciencia() {
-		// TODO Auto-generated method stub
-		
-	}
-	
+
 		//defineTipoUsuario();	
 	}
 	
@@ -132,8 +143,7 @@ public class Usuario {
 
 //Usuario
 	
-	/**
-	 * ArrayList<Usuario> paciencia = new ArrayList<Usuario>();   
+	/**   
 	 * public void get.Paciencia(){
 	 * for(double p:paciencia){
 	 * nivel += p;}
