@@ -1,5 +1,7 @@
 package bankRuns;
 
+import java.util.ArrayList;
+
 import repast.simphony.context.Context;
 import repast.simphony.context.space.continuous.ContinuousSpaceFactory;
 import repast.simphony.context.space.continuous.ContinuousSpaceFactoryFinder;
@@ -15,48 +17,86 @@ public class Builder implements ContextBuilder<Object>{
 	@Override
 	public Context build(Context<Object> context) {
 		
-		//NetworkBuilder <Object> netBuilder = new NetworkBuilder <Object>
-		//("socialNetwork", context, true);
-		//netBuilder.buildNetwork();
-		
-		/** El setting para el modelo sera en un espacio continuo de 75*75 denominado miMundo */
+		NetworkBuilder <Object> netBuilder = new NetworkBuilder <Object>
+		("socialNetwork", context, true);
+		netBuilder.buildNetwork();
+		/**
+		 *El setting para el modelo sera en un espacio continuo de 75*75 denominado miMundo
+		 */
 		context.setId("modeloBankRuns");
 		
 		int dimensionY = 75;
 		int dimensionX = 75;  
+		Parameters params = RunEnvironment.getInstance().getParameters();
+		
 		
 		ContinuousSpaceFactory spaceFactory = ContinuousSpaceFactoryFinder.createContinuousSpaceFactory(null);
 		ContinuousSpace<Object> space = spaceFactory.createContinuousSpace("miMundo", context, new RandomCartesianAdder<Object>(), new repast.simphony.space.continuous.StrictBorders(), dimensionX,dimensionY);
+		Bancos bancoA = new Bancos ("A");
+		context.add(bancoA);
+		
+		Bancos bancoB = new Bancos ("B");
+		context.add(bancoB);
+		
+		Bancos bancoC = new Bancos ("C");
+		context.add(bancoC);
+		
+		Bancos bancoD = new Bancos ("D");
+		context.add(bancoD);
+		
+		
 		/**
-		 * por el momento estableceremos el numero de usuarios en miMundo a 100 pero se planea que pueda ser un parametro ajustable por el el usuario 
+		 * por el momento estableceremos el numero e usuarios en miMundo a 100 pero se planea que pueda ser un parametro ajustable por el el usuario 
 		 */
 		int usuarioCount = 100;
+		ArrayList<Usuario> miPoblacion = new ArrayList<Usuario>();
+		
 		for (int i=0; i<usuarioCount; i++) {
-			double r = RandomHelper.nextDoubleFromTo(0,1);
+			double r = RandomHelper.nextDoubleFromTo(0,1);    //cÃ³mo asignar el banco a los usuarios 
 			if (r<0.25) {
-				context.add(new Usuario ("A"));
+				Usuario miAgente = new Usuario (bancoA);
+				context.add(miAgente);
+				miPoblacion.add(miAgente);
 					}
 			else if(r<0.5) {
-				context.add(new Usuario("B"));
-			}
+				Usuario miAgente = new Usuario (bancoB);
+						context.add(miAgente);
+						miPoblacion.add(miAgente);
+							}
+			
 			else if (r<0.75) {
-				context.add(new Usuario ("C"));
+				Usuario miAgente = new Usuario (bancoC);
+						context.add(miAgente);
+						miPoblacion.add(miAgente);
+
 			}
 			
 			else {
-				context.add(new Usuario("D"));
-			}
+				Usuario miAgente = new Usuario (bancoD);
+				context.add(miAgente);
+				miPoblacion.add(miAgente);
+
+	}
 		
 			
 		}
-			context.add(new Bancos ("A"));
-			context.add(new Bancos ("B"));
-			context.add(new Bancos ("C"));
-			context.add(new Bancos ("D"));
+		
+		//Creemos la red social
+		for (Usuario finder: miPoblacion) {
+			double propConect = RandomHelper.nextDoubleFromTo(.01, .3);
+			for (Usuario candidato: miPoblacion){
+				if (propConect > RandomHelper.nextDoubleFromTo(0, 1)) {
+					if (finder != candidato & finder.miRed.contains(candidato) == false){
+						finder.miRed.add(candidato);
+						candidato.miRed.add(finder);									// busca si no existe dentro de la red para que no se duplique
+					}
+				}
+			}
+		}
 		
 		/**
-		 * Agregamos 4 tipos de banco, posteriormente, el tamaño de cada uno se va a 
-		 * determinar por el número de usuarios que depositen en el banco.
+		 * Agregamos 4 tipos de banco, posteriormente, el tamaÃ±o de cada uno se va a 
+		 * determinar por el nÃºmero de usuarios que depositen en el banco.
 		 * FALTA AGREGAR CONDICION DE NUMERO DE USUARIOS.
 		  */
 		 
