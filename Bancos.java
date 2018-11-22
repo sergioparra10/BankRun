@@ -1,5 +1,6 @@
 package bankRuns;
 
+
 import java.util.ArrayList;
 
 import repast.simphony.space.continuous.ContinuousSpace;
@@ -26,14 +27,14 @@ public class Bancos {
 		
 	}
 	
-	ArrayList<Bancos> misUsuarios = new ArrayList<Bancos>();
+	ArrayList<Usuario> misUsuarios = new ArrayList<Usuario>();
 	  public void set.capital(){
-		  if (this.propio = true){
+		  if (this.propio == true){
 			  misUsuarios.add(this.fondos); // como extarer los fondos de la clase suuario para usar con la clase bancos
 		  for(double c:misUsuarios){
 		      this.capital += c;}
 		  }
-	
+		  
 	
 	  }
 	 
@@ -51,14 +52,19 @@ public class Bancos {
 	  }
 	  
 	  public void cerrar() {
-		  if (this.iliquido = true) {
+		  if (this.iliquido = true) {       //cerrar el banco 
 			  //cambiar forma imagen o color del banco
 		  }
 	  }
 }
+
+ public double getReservas() {
+	 return this.resTot;
+ }
+ }
 	  
 	  	
-	// Método para cerrar el banco
+	// MÃ©todo para cerrar el banco
 	
 	/**
 	 * public void () {
@@ -66,6 +72,3 @@ public class Bancos {
 	 * 	for (iliquido = true){
 	 * 		Cambiar el color del banco una vez que haya quebrado}}
 	 */
-	
-	
-
