@@ -1,5 +1,4 @@
 package bankRuns;
-
 import java.util.ArrayList;
 
 import cern.jet.random.ChiSquare;
@@ -13,60 +12,41 @@ public class Usuario {
 	int idUsuario;
 	double fondos;
 	int umbral;
-	int conectividad;
 	boolean retiro;
-	boolean alarm;
 	boolean especular;
-	boolean propio;
-	String miBanco;
-	public Bancos idBanco;
-	int highBadSignal = 2;
-	int lowBadSignal = 1;
-	int lowGoodSignal = -1;
-	int highGoodSignal = -2;
+	Bancos miBanco;
 	static int classID =1;
-	int t=1;
 	public Bancos resTot;
+	ArrayList<Usuario> miRed = new ArrayList<Usuario>();  //movamos la variable de instancia arriba
+
 	
-	Parameters params = RunEnvironment.getInstance().getParameters();
-	int maxUmbral=params.getInteger("Valor maximo del umbral");
-	int maxConect=params.getInteger("Valor maximo para el indice de conectividad");
 	
 	
 	public ContinuousSpace<Object> space;
 	
-	public Usuario(int conect, boolean ret, boolean ala, boolean espe, boolean prop, String bank) {
+	public Usuario(Bancos bank) {
 		this.miBanco = bank;
-		this.idUsuario = classID;
+		this.idUsuario = classID;   //conectar con otra clase
 		classID ++;
+		Parameters params = RunEnvironment.getInstance().getParameters();
+		int maxUmbral=params.getInteger("Valor maximo del umbral");
+		int maxConect=params.getInteger("Valor maximo para el indice de conectividad");
 		this.umbral = RandomHelper.nextIntFromTo(1, maxUmbral);
-		this.conectividad = RandomHelper.nextIntFromTo(1, maxConect);
-		this.retiro = ret;
-		this.alarm = ala;
-		this.especular = espe;
-		this.propio = prop;
+		this.retiro = false;
+		this.especular = false;
+		this.fondos = misFondos();  //ventaja, si queremos cambiar la distribucion lo hacemosdesde aqui
+		bank.misUsuarios.add(this);
+		bank.resTot += this.fondos;
 		
 	}
 	
-	public double misFondos() {
-		this.fondos = RandomHelper.createChiSquare(3).nextDouble();
-		return this.fondos;
+	public double misFondos() {                                      //lo pusimos dos veces, quitar linea 51
+		return RandomHelper.createChiSquare(3).nextDouble() + 1;   //creamos distribución chi, así arroja el número                                            //aqui no va este metodo, solo el return, lo demas va en el constructor
 	}
 	
-	@ScheduledMethod (start=1, interval=1, priority = 1000)
-	public void setValorInicial () {
-		if (t==1) {
-			if(this.t==1) {
-				this.fondos=this.misFondos();		//revisado
-				}
-				this.t++;
-		}
-		
-		
-	}
 	
 	public void bankMatch() {
-		if (this.miBanco = this.idBanco) {
+		if (this.miBanco = contacto.mibanco) {   //metodo para hilar los individuos con su banco
 			this.propio = true;
 		}
 		else {
@@ -75,48 +55,24 @@ public class Usuario {
 	}
 	
 	public void quiebra() {
-		if (this.fondos < this.resTot) {
+		if (this.fondos < this.resTot) {    //cierra el banco
 			this.alarm = true;
 		}
 	}
 
 	
-	ArrayList<Usuario> miRed = new ArrayList<Usuario>();
-	public void agregarContacto(Usuario nuevoContacto){
-		if(! miRed.contains(nuevoContacto)) {	
-		
-		miRed.add(nuevoContacto);}
-		
-		nuevoContacto.agregarContacto(this);}
 	
-	public int buscarContacto() {
-		int g = RandomHelper.nextIntFromTo(1, 100);
-		if (this.idUsuario == g) {
-			return g;
-			
-		}
-	}
-		public void agregarContactos() {
-	
-		while (miRed.size()<conectividad) {
-			Usuario nuevoContacto = buscarContacto();
-			agregarContacto(nuevoContacto);
-		}
-		
-	}
-	
-	ArrayList<Usuario> paciencia = new ArrayList<Usuario>();
 	public void sendSignal(){
-		if(alarm = true){
-			if(this.miBanco = this.idBanco){ //TODO: encontrar como extraer el banco al que pertenece el otro individuo o "Contacto"
-				paciencia.add(highBadSignal);
+		if(alarm == true){
+			if(this.miBanco == this.idBanco){ //TODO: encontrar como extraer el banco al que pertenece el otro individuo o "Contacto"
+				paciencia.add(highBadSignal); //como hacer que me acepte esta variable
 						}
 			else{
 				paciencia.add(lowBadSignal);
 						}
 				}
 		else{
-			if(this.miBanco = this.idBanco) { 
+			if(this.miBanco == this.idBanco) { 
 				paciencia.add(lowGoodSignal);
 						}
 			else{
@@ -126,7 +82,7 @@ public class Usuario {
 	}
 	
 	/**
-	 * Asignacion de fondos para cada individuo con base en una distribuci�n sesgada ala derecha
+	 * Asignacion de fondos para cada individuo con base en una distribución sesgada ala derecha
 	 */
 	}
 	
@@ -137,13 +93,13 @@ public class Usuario {
 
 //Usuario
 	
-	/**   
-	 * public void get.Paciencia(){
-	 * for(double p:paciencia){
-	 * nivel += p;}
-	 * return nivel;
-	 * }
-	 */
+	
+	  public void get.Paciencia(){
+	  for(double p:paciencia){
+	  nivel += p;}
+	  return nivel;
+	  }
+	 
 
 	
 
@@ -156,15 +112,23 @@ public class Usuario {
   * 		sendSignal();}
   * 	setPaciencia();
   * 	if (nivel>umbral){
-  * 		getReservas(); 
+  * 		if (this.miBanco==idBanco) 
+  *  	{Bancos getReservas(); 
+  * 		}
   * 		if (reservasTotales<fondos){
   * 			alarm = true; }
   * 		else {alarm = false}
   * 		sendSignal();
   * 		setPaciencia();
   * 
-  * 				
+  * 				primero generar un agente y meterlo en el contexto y al mismo tiempo lo meto en un arraylist de usuario
+  * 				ese arraylist va a tener a toda la poblacion, despues hacer un loop similar al tipo de sangre para que 
+  *				no se repita el individuo en la red social
+  *				simplificar: hashset en vez de arraylist y la red será fija 
   * 			 
   * 
   */
-
+	  
+	//Primero creamos bancos, luego clientes y los juntamos con los bancos y luego crear la red social
+	  //Hacer un shuffle y elegir amigos
+	  //Ver el ScheduledMethod del tipo de sangre para elegir parejas
