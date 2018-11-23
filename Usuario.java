@@ -1,7 +1,6 @@
-package bankRun;
+package bankRuns;
 import java.util.ArrayList;
 
-import cern.jet.random.ChiSquare;
 import repast.simphony.engine.environment.RunEnvironment;
 import repast.simphony.engine.schedule.ScheduledMethod;
 import repast.simphony.parameter.Parameters;
@@ -11,13 +10,13 @@ import repast.simphony.space.continuous.ContinuousSpace;
 public class Usuario {
 	/** Variable (int) que asiga un identificador a cada agente en el modelo diferente al default de JAVA */
 	int idUsuario;
-	/** Variable (double) para la dotaciÃ³n inicial del agente que posteriormente depositara en su banco */
+	/** Variable (double) para la dotación inicial del agente que posteriormente depositara en su banco */
 	double fondos;
-	/** Variable (int) integer que determina el nivel de paciencia que tiene un agente a las seÃ±ales que recibe de su red (aversiÃ³n a la perdida de su dotacion) */
+	/** Variable (int) integer que determina el nivel de paciencia que tiene un agente a las señales que recibe de su red (aversión a la perdida de su dotacion) */
 	int umbral;
-	/** Variable (boolean) que indica si el agente ya ha retirado sus depositos del banco (retiro = true)  y que posteriormente determinara la seÃ±al que tranamitida a su red */
+	/** Variable (boolean) que indica si el agente ya ha retirado sus depositos del banco (retiro = true)  y que posteriormente determinara la señal que tranamitida a su red */
 	boolean retiro;
-	/**  Variable (boolean) que indica si este agente es el espculador que sembrara la seÃ±al (semilla) especulativa al sistema */
+	/**  Variable (boolean) que indica si este agente es el espculador que sembrara la señal (semilla) especulativa al sistema */
 	boolean especular;
 	/** Variable de la clase Bancos que recupera el identificador individual de cada agente tipo Banco para verifica la existencia de la relacion entre un banco y el usuario (si es el banco al que pertene el usuario o no)*/
 	Bancos miBanco;
@@ -25,11 +24,11 @@ public class Usuario {
 	static int classID =1;
 	/** Variable de la clase Bancos que contiene las reserva totales con las que deipone el banco en ese moemento y que se actuliza cada vez que hay un retiro */
 	public Bancos resTot;
-	/** Variable (double) que caprura los niveles actuales de toleracia/paciencia que tiene un agente tipo usuario a las eÃ±ales que recibe sobre el estado del sistema bancario */
+	/** Variable (double) que caprura los niveles actuales de toleracia/paciencia que tiene un agente tipo usuario a las eñales que recibe sobre el estado del sistema bancario */
 	double paciencia = 0;
 	/**  */
 	int poblacion;
-	/** Varibale */
+	/** Variable */
 	boolean alarm;
 	/**  */
 	int t ;
@@ -48,13 +47,13 @@ public class Usuario {
 		this.idUsuario = classID;   //conectar con otra clase
 		classID ++;
 		Parameters params = RunEnvironment.getInstance().getParameters();
-		int maxUmbral=params.getInteger("umbralMaximo");
-		int maxUsuarios=params.getInteger("totalClientes");
-		int nEspecular=params.getInteger("numeroEspeculador");
+		int maxUmbral=params.getInteger("maxUmbral");
+		int maxUsuarios=params.getInteger("maxUsuarios");
+		int nEspecular=params.getInteger("nEspecular");
 
 		this.umbral = RandomHelper.nextIntFromTo(1, maxUmbral);
 		this.retiro = false;
-		
+		this. t =1;
 		this.especular = false;
 		if(this.idUsuario<nEspecular) {
 			this.especular=true;
@@ -67,22 +66,21 @@ public class Usuario {
 		
 	}
 	 /** Metodo para asignar las dotaciones iniciales a cada Usuario de acuerdo con  */
-	public double misFondos() {                                      //lo pusimos dos veces, quitar linea 51
-		return RandomHelper.createChiSquare(3).nextDouble() + 1;   //creamos distribuciÃ³n chi, asÃ­ arroja el nÃºmero                                            //aqui no va este metodo, solo el return, lo demas va en el constructor
+	public double misFondos() {                                    
+		return RandomHelper.createChiSquare(3).nextDouble() + 1;   //creamos distribución chi, así arroja el número                                            //aqui no va este metodo, solo el return, lo demas va en el constructor
 	}
 	
 	
-	/** MÃ©todo para determinar que usuario serÃ¡ el/la que siembre la semilla de especulacion en el modelo */
+	/** Método para determinar que usuario será el/la que siembre la semilla de especulacion en el modelo */
 	
 	public void especular(){ // TODO: lograr que la masa de especuladores sea mayor a uno y de preferencia un parametro que pueda modificarse en el GUI
-		/** Por medio de esta variable aletoria de distrubucion unforme se seleccionara el id del Usuario que iniciara la especulacion */
-		int e = RandomHelper.nextIntFromTo(1, maxUsuarios); //TODO: conseguir que funcione el intervalos con el parametro ingresado por el usuario del modelo
-		if (this.idUsuario == e) {
-			this.especular = true; // le asignamos a este usuario la obligacion de implantar la semilla de especulacion
-			this.alarm = true; // artificialmente el individuo no recibe sus fondos por tanto se "alarma" y transmite esto en la seÃ±al
+		if (this.especular == true) {
+			this.alarm = true; // artificialmente el individuo no recibe sus fondos por tanto se "alarma" y transmite esto en la señal
 			this.retiro = true;
 			miBanco.resTot -= this.fondos; // el usuario retira sus fondos a pesar de que se alarma artificialmente, es como si mintiera sobre el estado de los fundamentos del banco
+			this.fondos=0;
 		}
+		
 	}
 	
 	public double getReservas() { // tal vez innecesario
@@ -96,19 +94,21 @@ public class Usuario {
 	}
 	
 	
-	public void setSignal() {
+	public void getSignal() {
+		Parameters params = RunEnvironment.getInstance().getParameters();
+		int maxUmbral=params.getInteger("umbralMaximo");
 		for(Usuario amigo:miRed ) {
 			if(amigo.retiro == true) {
 				if(this.miBanco == amigo.miBanco) {
 					if (amigo.alarm == true) {
-						this.paciencia += (0.2 * maxUmbral); //TODO fijar una proporcion del maximo de umbral como valor de cada tipo de seÃ±al
+						this.paciencia += (0.2 * maxUmbral); //TODO fijar una proporcion del maximo de umbral como valor de cada tipo de señal
 					}
 					else { this.paciencia -= (0.2 * maxUmbral);
 				} 
 					}
 					else  { // ya no es es el mismo banco
 						if (amigo.alarm == true) {
-						this.paciencia += (0.1 * maxUmbral); //TODO fijar una proporcion del maximo de umbral como valor de cada tipo de seÃ±al
+						this.paciencia += (0.1 * maxUmbral); //TODO fijar una proporcion del maximo de umbral como valor de cada tipo de señal
 					}
 					else { this.paciencia -= (0.1 * maxUmbral);
 				        }
@@ -126,26 +126,32 @@ public class Usuario {
 		return miBanco.resTot;
 	}
 	
+	public int getId() {
+		return this.idUsuario;
+	}
 
 @ScheduledMethod(start=1, interval=1, shuffle=true,priority=1000)
 	public void interactuar() {
 	if(this.t==1) { // aca realizamos esto unicamente en el primer tick debido a que es el inicio de la especulacion
-	 	especular();
-	 	setSignal();
+		especular();
+	 	getSignal();
 	}
 	this.t++;
 	if (this.paciencia > this.umbral) {
 		this.retiro = true;
-		getReservas();
 			if(miBanco.resTot < this.fondos) {
 				this.alarm = true;
 				miBanco.resTot = 0;
+				this.fondos= 0;
+				miBanco.liquidar();
 			}
 			else {
 				miBanco.resTot -= this.fondos;
+				this.fondos= 0;
 			}
 	}
-	setSignal();
+	getSignal();
+	
 	}
 }
 
@@ -170,7 +176,7 @@ public class Usuario {
   * 				primero generar un agente y meterlo en el contexto y al mismo tiempo lo meto en un arraylist de usuario
   * 				ese arraylist va a tener a toda la poblacion, despues hacer un loop similar al tipo de sangre para que 
   *				no se repita el individuo en la red social
-  *				simplificar: hashset en vez de arraylist y la red serÃ¡ fija 
+  *				simplificar: hashset en vez de arraylist y la red será fija 
   * 			 
   * 
   */
@@ -181,7 +187,7 @@ public class Usuario {
 
 /**
  * En el scheduled methos si quiero una condicion que un amigo no sea alguien de mi red social,
- * para captar su banco va a ser asÃ­
+ * para captar su banco va a ser así
  * 
  * searcher.miBanco != candidato.miBanco
  * for (Usuario amigo:this.miRed)

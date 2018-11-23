@@ -1,4 +1,4 @@
-package bankRun;
+package bankRuns;
 
 import java.util.ArrayList;
 
@@ -17,13 +17,10 @@ public class Builder implements ContextBuilder<Object>{
 	@Override
 	public Context build(Context<Object> context) {
 		
-		NetworkBuilder <Object> netBuilder = new NetworkBuilder <Object>
-		("socialNetwork", context, true);
-		netBuilder.buildNetwork();
 		/**
 		 *El setting para el modelo sera en un espacio continuo de 75*75 denominado miMundo
 		 */
-		context.setId("modeloBankRuns");
+		context.setId("bankRuns");
 		
 		int dimensionY = 75;
 		int dimensionX = 75;  
@@ -52,7 +49,7 @@ public class Builder implements ContextBuilder<Object>{
 		ArrayList<Usuario> miPoblacion = new ArrayList<Usuario>();
 		
 		for (int i=0; i<usuarioCount; i++) {
-			double r = RandomHelper.nextDoubleFromTo(0,1);    //cÃ³mo asignar el banco a los usuarios 
+			double r = RandomHelper.nextDoubleFromTo(0,1);    //cómo asignar el banco a los usuarios 
 			if (r<0.25) {
 				Usuario miAgente = new Usuario (bancoA);
 				context.add(miAgente);
@@ -95,8 +92,8 @@ public class Builder implements ContextBuilder<Object>{
 		}
 		
 		/**
-		 * Agregamos 4 tipos de banco, posteriormente, el tamaÃ±o de cada uno se va a 
-		 * determinar por el nÃºmero de usuarios que depositen en el banco.
+		 * Agregamos 4 tipos de banco, posteriormente, el tamaño de cada uno se va a 
+		 * determinar por el número de usuarios que depositen en el banco.
 		 * FALTA AGREGAR CONDICION DE NUMERO DE USUARIOS.
 		  */
 		 

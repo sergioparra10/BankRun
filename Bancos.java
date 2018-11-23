@@ -1,4 +1,5 @@
-package bankRun;
+package bankRuns;
+
 
 
 import java.util.ArrayList;
@@ -30,19 +31,25 @@ public class Bancos {
 	}
 	
 	  public void setCapital(){
+		  this.capital =0;
 		  for (Usuario miAgente: misUsuarios){
 			  double c = (miAgente.fondos);
-			  this.capital = c++;      // como extarer los fondos de la clase suuario para usar con la clase bancos
+			  this.capital += c;      // como extarer los fondos de la clase suuario para usar con la clase bancos
 		  }
 		 //TODO: Corroborar  que el metodo realmente suma los fondos de cada elemento dentro del AL de cada banco
 	
 	  }
 	 	  
-	  public void liquidar() {
-	  if(this.resTot <= 0) {
-			  this.iliquido = true;
+	  public void liquidar() { //ambos dentro de un eschedules method
+			  if(this.resTot <= 0) {
+				  this.iliquido = true;
+				  for (Usuario miAgente: misUsuarios){
+					  miAgente.alarm = true;
+					  miAgente.fondos =0;
+					  miAgente.retiro = true;
 		  }
-		  //TODO: resolver como hcaer una seÃ±alizacion de que el banco ha quebrado y ya no opera para ninguno de sus usuarios
+			  }
+		  //TODO: resolver como hcaer una señalizacion de que el banco ha quebrado y ya no opera para ninguno de sus usuarios
 	 }
 	  
 	  public void cerrar() { //TODO: 
@@ -52,14 +59,18 @@ public class Bancos {
 	  }
 	 }
 
-//TODO: 
  public double getReservas() {
 	 return this.resTot;
  }
+ 
+ public String getName() {
+	 return this.idBanco;
+ }
+ 
  }
 	  
 	  	
-	// MÃ©todo para cerrar el banco
+	// Método para cerrar el banco
 	
 	/**
 	 * public void () {
