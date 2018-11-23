@@ -1,4 +1,7 @@
 package bankRuns;
+/*
+ * Clase en la cual se definen las acciones y caracteristicas de los Usuarios.
+ */
 import java.util.ArrayList;
 
 import repast.simphony.engine.environment.RunEnvironment;
@@ -10,21 +13,21 @@ import repast.simphony.space.continuous.ContinuousSpace;
 public class Usuario {
 	/** Variable (int) que asiga un identificador a cada agente en el modelo diferente al default de JAVA */
 	int idUsuario;
-	/** Variable (double) para la dotaciÛn inicial del agente que posteriormente depositara en su banco */
+	/** Variable (double) para la dotaci√≥n inicial del agente que posteriormente depositara en su banco */
 	double fondos;
-	/** Variable (int) integer que determina el nivel de paciencia que tiene un agente a las seÒales que recibe de su red (aversiÛn a la perdida de su dotacion) */
+	/** Variable (int) integer que determina el nivel de paciencia que tiene un agente a las se√±ales que recibe de su red (aversi√≥n a la perdida de su dotacion) */
 	int umbral;
-	/** Variable (boolean) que indica si el agente ya ha retirado sus depositos del banco (retiro = true)  y que posteriormente determinara la seÒal que tranamitida a su red */
+	/** Variable (boolean) que indica si el agente ya ha retirado sus depositos del banco (retiro = true)  y que posteriormente determinara la se√±al que tranamitida a su red */
 	boolean retiro;
-	/**  Variable (boolean) que indica si este agente es el espculador que sembrara la seÒal (semilla) especulativa al sistema */
+	/**  Variable (boolean) que indica si este agente es el espculador que sembrara la se√±al (semilla) especulativa al sistema */
 	boolean especular;
 	/** Variable de la clase Bancos que recupera el identificador individual de cada agente tipo Banco para verifica la existencia de la relacion entre un banco y el usuario (si es el banco al que pertene el usuario o no)*/
 	Bancos miBanco;
 	/** Variable (static int) que genera un identificador individual para cada agente tipo usuario */
 	static int classID =1;
-	/** Variable de la clase Bancos que contiene las reserva totales con las que deipone el banco en ese moemento y que se actuliza cada vez que hay un retiro */
+	/** Variable de la clase Bancos que contiene las reserva totales con las que deipone el banco en ese momento y que se actuliza cada vez que hay un retiro */
 	public Bancos resTot;
-	/** Variable (double) que caprura los niveles actuales de toleracia/paciencia que tiene un agente tipo usuario a las eÒales que recibe sobre el estado del sistema bancario */
+	/** Variable (double) que caprura los niveles actuales de toleracia/paciencia que tiene un agente tipo usuario a las e√±ales que recibe sobre el estado del sistema bancario */
 	double paciencia = 0;
 	/**  */
 	int poblacion;
@@ -42,23 +45,30 @@ public class Usuario {
 	
 	public ContinuousSpace<Object> space;
 	
+	/**
+	 * Constructor que asigna a cada usuario sus caracteristicas (parametros)
+	 */
 	public Usuario(Bancos bank) {
 		this.miBanco = bank;
 		this.idUsuario = classID;   //conectar con otra clase
 		classID ++;
+		/** Parametros del modelo*/
 		Parameters params = RunEnvironment.getInstance().getParameters();
+		/** Umbral que define si el usuario retira o no con base en las se√±ales que ya recibio) */
 		int maxUmbral=params.getInteger("maxUmbral");
+		/** El numero total de Usuarios en el modelo*/
 		int maxUsuarios=params.getInteger("maxUsuarios");
+		/** Numero de Usuarios especuldores que hay en el modelo*/
 		int nEspecular=params.getInteger("nEspecular");
-
+		/** Numero aleatorio que define el numero maximo de se√±ales malaas que lo hacen retirar*/
 		this.umbral = RandomHelper.nextIntFromTo(1, maxUmbral);
 		this.retiro = false;
+		/** Indicar que solamente en el primer tick se definen especuladores */ 
 		this. t =1;
 		this.especular = false;
 		if(this.idUsuario<nEspecular) {
 			this.especular=true;
 		}
-		
 		this.fondos = misFondos();  //ventaja, si queremos cambiar la distribucion lo hacemos desde aqui
 		bank.misUsuarios.add(this);
 		bank.capital += this.fondos; // cambiamos bank.resTot por bank.capital 
@@ -67,15 +77,15 @@ public class Usuario {
 	}
 	 /** Metodo para asignar las dotaciones iniciales a cada Usuario de acuerdo con  */
 	public double misFondos() {                                    
-		return RandomHelper.createChiSquare(3).nextDouble() + 1;   //creamos distribuciÛn chi, asÌ arroja el n˙mero                                            //aqui no va este metodo, solo el return, lo demas va en el constructor
+		return RandomHelper.createChiSquare(3).nextDouble() + 1;   //creamos distribuci√≥n chi, as√≠ arroja el n√∫mero                                            //aqui no va este metodo, solo el return, lo demas va en el constructor
 	}
 	
 	
-	/** MÈtodo para determinar que usuario ser· el/la que siembre la semilla de especulacion en el modelo */
+	/** M√©todo para determinar que usuario ser√° el/la que siembre la semilla de especulacion en el modelo */
 	
 	public void especular(){ // TODO: lograr que la masa de especuladores sea mayor a uno y de preferencia un parametro que pueda modificarse en el GUI
 		if (this.especular == true) {
-			this.alarm = true; // artificialmente el individuo no recibe sus fondos por tanto se "alarma" y transmite esto en la seÒal
+			this.alarm = true; // artificialmente el individuo no recibe sus fondos por tanto se "alarma" y transmite esto en la se√±al
 			this.retiro = true;
 			miBanco.resTot -= this.fondos; // el usuario retira sus fondos a pesar de que se alarma artificialmente, es como si mintiera sobre el estado de los fundamentos del banco
 			this.fondos=0;
@@ -86,14 +96,15 @@ public class Usuario {
 	public double getReservas() { // tal vez innecesario
 		return miBanco.resTot;
 	}
-	
 	public void getAlarm() {  //TODO: revisar si en este metodo necesitamos un if adicional para especificar que antes de evaluar los fondos debe efectivamente retirar (retiro = true)
 		if (miBanco.resTot < this.fondos) {
 			this.alarm = true;
 		}
 	}
 	
-	
+	/**
+	 * Metodo en el cual el Usuario recibe se√±ales con base en si las personas de su red pudieron retirar o no 	
+	 */
 	public void getSignal() {
 		Parameters params = RunEnvironment.getInstance().getParameters();
 		int maxUmbral=params.getInteger("umbralMaximo");
@@ -101,14 +112,14 @@ public class Usuario {
 			if(amigo.retiro == true) {
 				if(this.miBanco == amigo.miBanco) {
 					if (amigo.alarm == true) {
-						this.paciencia += (0.2 * maxUmbral); //TODO fijar una proporcion del maximo de umbral como valor de cada tipo de seÒal
+						this.paciencia += (0.2 * maxUmbral); //TODO fijar una proporcion del maximo de umbral como valor de cada tipo de se√±al
 					}
 					else { this.paciencia -= (0.2 * maxUmbral);
 				} 
 					}
 					else  { // ya no es es el mismo banco
 						if (amigo.alarm == true) {
-						this.paciencia += (0.1 * maxUmbral); //TODO fijar una proporcion del maximo de umbral como valor de cada tipo de seÒal
+						this.paciencia += (0.1 * maxUmbral); //TODO fijar una proporcion del maximo de umbral como valor de cada tipo de se√±al
 					}
 					else { this.paciencia -= (0.1 * maxUmbral);
 				        }
@@ -119,8 +130,6 @@ public class Usuario {
 		}
 	}
 	
-
-	
 	public double setReservas() {
 		miBanco.resTot = miBanco.resTot - this.fondos; // tal vez innecesario
 		return miBanco.resTot;
@@ -129,7 +138,12 @@ public class Usuario {
 	public int getId() {
 		return this.idUsuario;
 	}
-
+/**
+ * Lo que pasa en cada tick 
+ * (1) en el primer tick comienza la especulacion 
+ * (2) si retiro o no depende de mi umbral de paciencia y de la cantitdad de se√±ales que he recibido de las personas de mi red social
+ * (3) si el banco se queda sin dinero quiebra y el Usuario manda una se√±al
+ */
 @ScheduledMethod(start=1, interval=1, shuffle=true,priority=1000)
 	public void interactuar() {
 	if(this.t==1) { // aca realizamos esto unicamente en el primer tick debido a que es el inicio de la especulacion
@@ -176,7 +190,7 @@ public class Usuario {
   * 				primero generar un agente y meterlo en el contexto y al mismo tiempo lo meto en un arraylist de usuario
   * 				ese arraylist va a tener a toda la poblacion, despues hacer un loop similar al tipo de sangre para que 
   *				no se repita el individuo en la red social
-  *				simplificar: hashset en vez de arraylist y la red ser· fija 
+  *				simplificar: hashset en vez de arraylist y la red ser√° fija 
   * 			 
   * 
   */
@@ -187,7 +201,7 @@ public class Usuario {
 
 /**
  * En el scheduled methos si quiero una condicion que un amigo no sea alguien de mi red social,
- * para captar su banco va a ser asÌ
+ * para captar su banco va a ser as√≠
  * 
  * searcher.miBanco != candidato.miBanco
  * for (Usuario amigo:this.miRed)
