@@ -1,4 +1,4 @@
-package bankRuns;
+package bankRun;
 
 
 import java.util.ArrayList;
@@ -13,7 +13,8 @@ public class Bancos {
 	double capital;
 	boolean iliquido;
 	//public Usuario miBanco;
-	//public Usuario fondos;
+	public Usuario fondos;
+	public Usuario retiro;
 	//public Usuario propio;
 	ArrayList<Usuario> misUsuarios = new ArrayList<Usuario>();
 	
@@ -29,42 +30,36 @@ public class Bancos {
 	}
 	
 	  public void setCapital(){
-		  if (Usuario.miBanco = this.idBanco){
-			  misUsuarios.add(this.fondos); // como extarer los fondos de la clase suuario para usar con la clase bancos
-		  for(double c:misUsuarios){
-		      this.capital += c;}
+		  for (Usuario miAgente: misUsuarios){
+			  double c = (miAgente.fondos);
+			  this.capital = c++;      // como extarer los fondos de la clase suuario para usar con la clase bancos
 		  }
-		  
+		 //TODO: Corroborar  que el metodo realmente suma los fondos de cada elemento dentro del AL de cada banco
 	
 	  }
-	 
-	
-	//Banco establecer el nexo entre usuarios y bancos
-	  
-	  public void setReservas(double retiro){
-	  	if () {
-	  		if(this.resTot < Usuario.fondos){
-	  			iliquido=true;
-	  			this.resTot = this.resTot - Usuario.fondos;
-	  			}
-	  		else {this.resTot = this.resTot - this.fondos;}
-	  	} 
-	  }
-	  
-	  public void cerrar() {
-		  if (this.iliquido = true) {       //cerrar el banco 
-			  //cambiar forma imagen o color del banco
+	 	  
+	  public void liquidar() {
+	  if(this.resTot <= 0) {
+			  this.iliquido = true;
 		  }
+		  //TODO: resolver como hcaer una señalizacion de que el banco ha quebrado y ya no opera para ninguno de sus usuarios
+	 }
+	  
+	  public void cerrar() { //TODO: 
+		  for (Usuario miAgente: misUsuarios)
+	  {       //cerrar el banco 
+		  //cambiar forma imagen o color del banco
 	  }
+	 }
 
-
+//TODO: 
  public double getReservas() {
 	 return this.resTot;
  }
  }
 	  
 	  	
-	// M�todo para cerrar el banco
+	// Método para cerrar el banco
 	
 	/**
 	 * public void () {
@@ -72,4 +67,3 @@ public class Bancos {
 	 * 	for (iliquido = true){
 	 * 		Cambiar el color del banco una vez que haya quebrado}}
 	 */
-
