@@ -6,6 +6,7 @@ package bankRuns;
 
 import java.util.ArrayList;
 
+import repast.simphony.engine.schedule.ScheduledMethod;
 import repast.simphony.space.continuous.ContinuousSpace;
 
 public class Bancos {
@@ -21,10 +22,13 @@ public class Bancos {
 	double capital;
 	/** Variable (boolean) que indica si el banco tiene o no dinero */
 	boolean iliquido;
-	/** Variable de la clase Usuarios para la dotaci√≥n inicial del agente que posteriormente depositara en su banco */
+	/** Variable de la clase Usuario para la dotacion inicial del agente que posteriormente depositara en su banco */
 	public Usuario fondos;
-	/** Variable de la clase Usuario que indica si el agente ya ha retirado sus depositos del banco (retiro = true)  y que posteriormente determinara la se√±al que tranamitida a su red */
+	/** Variable de la clase Usuario que indica si el agente ya ha retirado sus depositos del banco (retiro = true)  y que posteriormente determinara la seÒal que tranamitida a su red */
 	public Usuario retiro;
+	/** Variable */
+	int k =1; 
+	
 	ArrayList<Usuario> misUsuarios = new ArrayList<Usuario>();
 	
 	
@@ -32,7 +36,7 @@ public class Bancos {
 	
 	public Bancos (String idB) {
 		this.idBanco = idB;
-		
+
 	}
 	/** 
 	 * Metodo que recauda el dinero de los usuarios  
@@ -61,7 +65,7 @@ public class Bancos {
 					  miAgente.retiro = true;
 		  }
 			  }
-		  //TODO: resolver como hcaer una se√±alizacion de que el banco ha quebrado y ya no opera para ninguno de sus usuarios
+		  //TODO: resolver como hcaer una seÒalizacion de que el banco ha quebrado y ya no opera para ninguno de sus usuarios
 	 }
 	 /** 
 	  * Metodo para cerrar un banco si se queda sin dinero
@@ -81,10 +85,18 @@ public class Bancos {
 	 return this.idBanco;
  }
  
+ @ScheduledMethod (start=1, interval=1, shuffle=true,priority=100)
+ 	public void abrirBanco() {
+	 if(this.k==1) { // aca realizamos esto unicamente en el primer tick debido a que es el inicio de la especulacion
+			setCapital();
+		}
+		this.k++;
  }
-	  
+}
+
+
 	  	
-// M√©todo para cerrar el banco
+// MÈtodo para cerrar el banco
 	
 	/**
 	 * public void () {

@@ -38,7 +38,7 @@ public class Builder implements ContextBuilder<Object>{
 		ContinuousSpace<Object> space = spaceFactory.createContinuousSpace("miMundo", context, new RandomCartesianAdder<Object>(), new repast.simphony.space.continuous.StrictBorders(), dimensionX,dimensionY);
 		
 		/**
-		 * Aqui definimos los bancos. En nuestro modelo decidimos crear cuatro bancos los cuales tendr√°n diferentes
+		 * Aqui definimos los bancos. En nuestro modelo decidimos crear cuatro bancos los cuales tendr·n diferentes
 		 * caracteristicas en cuanto al numero de fondos que poseen.
 		 */
 		
@@ -72,7 +72,7 @@ public class Builder implements ContextBuilder<Object>{
 		 *  De manera que la poblacion tiene la misma probabilidad de pertenecer a uno de los bancos.
 		 */
 		for (int i=0; i<usuarioCount; i++) {
-			double r = RandomHelper.nextDoubleFromTo(0,1);    //c√≥mo asignar el banco a los usuarios 
+			double r = RandomHelper.nextDoubleFromTo(0,1);    //cÛmo asignar el banco a los usuarios 
 			if (r<0.25) {
 				Usuario miAgente = new Usuario (bancoA);
 				context.add(miAgente);
