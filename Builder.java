@@ -2,6 +2,10 @@ package bankRuns;
 
 import java.util.ArrayList;
 
+/**
+ * La clase Builder nos permite definir las caracteristicas, el entorno y los agentes que utilizamos en el modelo.
+ */
+
 import repast.simphony.context.Context;
 import repast.simphony.context.space.continuous.ContinuousSpaceFactory;
 import repast.simphony.context.space.continuous.ContinuousSpaceFactoryFinder;
@@ -26,9 +30,18 @@ public class Builder implements ContextBuilder<Object>{
 		int dimensionX = 75;  
 		Parameters params = RunEnvironment.getInstance().getParameters();
 		
-		
+		/**
+		 * Estos comandos son los que crean un mundo en donde el modelo basado en agentes se va a desarrollar, para nuestro
+		 * modelo elegimos un mundo continuo y acotado.
+		 */
 		ContinuousSpaceFactory spaceFactory = ContinuousSpaceFactoryFinder.createContinuousSpaceFactory(null);
 		ContinuousSpace<Object> space = spaceFactory.createContinuousSpace("miMundo", context, new RandomCartesianAdder<Object>(), new repast.simphony.space.continuous.StrictBorders(), dimensionX,dimensionY);
+		
+		/**
+		 * Aqui definimos los bancos. En nuestro modelo decidimos crear cuatro bancos los cuales tendrÃ¡n diferentes
+		 * caracteristicas en cuanto al numero de fondos que poseen.
+		 */
+		
 		Bancos bancoA = new Bancos ("A");
 		context.add(bancoA);
 		
@@ -43,13 +56,23 @@ public class Builder implements ContextBuilder<Object>{
 		
 		
 		/**
-		 * por el momento estableceremos el numero e usuarios en miMundo a 100 pero se planea que pueda ser un parametro ajustable por el el usuario 
+		 * Mediante este comando declaramos el numero de usuarios que viviran en el modelo.
+		 * Por el momento estableceremos el numero de usuarios en miMundo a 100,
+		 *  pero es un parametro ajustable por el el usuario en el modelo.
 		 */
 		int usuarioCount = 100;
+		/**
+		 * Mediante este ArrayList definimos a la poblacion que vive en el modelo, es decir, es una lista
+		 * que guarda a todos los usuarios.
+		 */
 		ArrayList<Usuario> miPoblacion = new ArrayList<Usuario>();
 		
+		/**
+		 * Con este loop le asignamos aleatoriamente un banco a los usuarios.
+		 *  De manera que la poblacion tiene la misma probabilidad de pertenecer a uno de los bancos.
+		 */
 		for (int i=0; i<usuarioCount; i++) {
-			double r = RandomHelper.nextDoubleFromTo(0,1);    //cómo asignar el banco a los usuarios 
+			double r = RandomHelper.nextDoubleFromTo(0,1);    //cÃ³mo asignar el banco a los usuarios 
 			if (r<0.25) {
 				Usuario miAgente = new Usuario (bancoA);
 				context.add(miAgente);
@@ -78,24 +101,27 @@ public class Builder implements ContextBuilder<Object>{
 			
 		}
 		
-		//Creemos la red social
+		/**
+		 * Creamos la red social, los individuos estan conectados entre ellos.
+		 * Esta red es la base para esparcir o no algun rumor sobre el estatus de los bancos.
+		 * 
+		 */
 		for (Usuario finder: miPoblacion) {
 			double propConect = RandomHelper.nextDoubleFromTo(.01, .3);
 			for (Usuario candidato: miPoblacion){
 				if (propConect > RandomHelper.nextDoubleFromTo(0, 1)) {
+					/**
+					 * Esta condicion elimina el escenario en donde un agente se repita dentro de una misma red social.
+					 */
 					if (finder != candidato & finder.miRed.contains(candidato) == false){
 						finder.miRed.add(candidato);
-						candidato.miRed.add(finder);									// busca si no existe dentro de la red para que no se duplique
+						candidato.miRed.add(finder);									
 					}
 				}
 			}
 		}
 		
-		/**
-		 * Agregamos 4 tipos de banco, posteriormente, el tamaño de cada uno se va a 
-		 * determinar por el número de usuarios que depositen en el banco.
-		 * FALTA AGREGAR CONDICION DE NUMERO DE USUARIOS.
-		  */
+	
 		 
 	return context;
 	
