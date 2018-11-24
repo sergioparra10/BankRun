@@ -30,9 +30,9 @@ public class Usuario {
 	double paciencia = 0;
 	/**  */
 	int poblacion;
-	/** Variable */
+	/** Variable (boolean) que se activa cuando el cleinte de un banco acude al banco a retirar sus fondos pero el banco no puede cubrir el total de sus depositos */
 	boolean alarm;
-	/**  */
+	/** Variable (int) de conteo del numero de ticks en el modelo */
 	int t ;
 	/** Variable que le permite al usuario del modelo determinar el total de agentes tipo Usuario en el espacio */
 	//int maxUsuarios;
@@ -80,7 +80,7 @@ public class Usuario {
 	}
 	
 	
-	/** Método para determinar que usuario será el/la que siembre la semilla de especulacion en el modelo */
+	/** Método para determinar que usuario será el que siembre la semilla de especulacion en el modelo */
 	
 	public void especular(){ // TODO: lograr que la masa de especuladores sea mayor a uno y de preferencia un parametro que pueda modificarse en el GUI
 		if (this.especular == true) {

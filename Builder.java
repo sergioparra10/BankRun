@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import repast.simphony.context.Context;
 import repast.simphony.context.space.continuous.ContinuousSpaceFactory;
 import repast.simphony.context.space.continuous.ContinuousSpaceFactoryFinder;
-import repast.simphony.context.space.graph.NetworkBuilder;
 import repast.simphony.dataLoader.ContextBuilder;
 import repast.simphony.engine.environment.RunEnvironment;
 import repast.simphony.parameter.Parameters;
@@ -19,7 +18,7 @@ import repast.simphony.space.continuous.RandomCartesianAdder;
 
 public class Builder implements ContextBuilder<Object>{
 	@Override
-	public Context build(Context<Object> context) {
+	public Context build(Context<Object> context) { //TODO: hay un warning sobre la necesidad de parametrizar el context
 		
 		/**
 		 *El setting para el modelo sera en un espacio continuo de 75*75 denominado miMundo

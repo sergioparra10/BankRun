@@ -26,7 +26,7 @@ public class Bancos {
 	public Usuario fondos;
 	/** Variable de la clase Usuario que indica si el agente ya ha retirado sus depositos del banco (retiro = true)  y que posteriormente determinara la señal que tranamitida a su red */
 	public Usuario retiro;
-	/** Variable */
+	/** Variable (int) de conteo del numero de tick en el modelo */
 	int k =1; 
 	
 	ArrayList<Usuario> misUsuarios = new ArrayList<Usuario>();
@@ -39,14 +39,14 @@ public class Bancos {
 
 	}
 	/** 
-	 * Metodo que recauda el dinero de los usuarios  
+	 * Metodo que determina el stock de fondos con los que el banco forma su capital con base en la suma de fondos que sus clientes depositan
 	 */
 	  public void setCapital(){
 		  this.capital =0;
 		  for (Usuario miAgente: misUsuarios){
 			  double c = (miAgente.fondos);
 	/**  
-	 * Extarer los fondos de la clase Usuario para usar con la clase Bancos
+	 * Extarer los fondos de la clase Usuario para usar en la clase Bancos
 	 */
 			  this.capital += c;   
 		  }
@@ -54,7 +54,7 @@ public class Bancos {
 	
 	  }
 	  /**
-	   * Metodo para que los agentes se informen si su banco tiene o no dinero 
+	   * Metodo para que los agentes se informen si su banco tiene reservas suficientes para honrar su depositos
 	   */
 	  public void liquidar() { //ambos dentro de un schedule method
 			  if(this.resTot <= 0) {
@@ -68,7 +68,7 @@ public class Bancos {
 		  //TODO: resolver como hcaer una señalizacion de que el banco ha quebrado y ya no opera para ninguno de sus usuarios
 	 }
 	 /** 
-	  * Metodo para cerrar un banco si se queda sin dinero
+	  * Metodo para cerrar un banco cuando se vuelve iliquido y no tiene fondos suficientes para honrar ninguno de los depositos
 	  */
 	  public void cerrar() { 
 		  for (Usuario miAgente: misUsuarios)
@@ -81,9 +81,13 @@ public class Bancos {
 	 return this.resTot;
  }
  
+ /** Metodo que regresa el id unico de cada banco que permite identificar a cada banco en el GUI */
+ 
  public String getName() {
 	 return this.idBanco;
  }
+ 
+ /** Schedule method para que el banco determine su stock de capital con el cual operara */
  
  @ScheduledMethod (start=1, interval=1, shuffle=true,priority=100)
  	public void abrirBanco() {
