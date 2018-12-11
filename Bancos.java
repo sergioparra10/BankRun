@@ -1,21 +1,21 @@
 package bankRuns;
 
-/**
- * Clase en la cual se definen las acciones y caracteristicas de los bancos. 
- */
+/**  Clase en la cual se definen las acciones y caracteristicas de los bancos. */
 
 import java.util.ArrayList;
 
+import repast.simphony.engine.environment.RunEnvironment;
 import repast.simphony.engine.schedule.ScheduledMethod;
+import repast.simphony.parameter.Parameters;
 import repast.simphony.space.continuous.ContinuousSpace;
 
 public class Bancos {
 	/** Variable (String) para tener un identificador de cada uno de los bancos*/
 	String idBanco;
 	/** Variable (double) la tasa de reservas requeridas de los bancos*/
-	double resReq;
+	double resReq = 0.03;
 	/** Variable (double) para el exedente de reservas */
-	double resExe;
+	double resExe = 0.1;
 	/** Variable (double) es la suma de las reservas requeridas y el exedente */
 	double resTot = (this.capital *(this.resExe + this.resReq));
 	/** Variable (double) para el capital de cada banco (depositos que hacen los usuarios) */
@@ -28,7 +28,7 @@ public class Bancos {
 	public Usuario retiro;
 	/** Variable (int) de conteo del numero de tick en el modelo */
 	int k =1; 
-	
+	/** ArraYList de la clase Bancos que almacena al conjunto de agentes tipo Usuario que estan vinculados a un banco en especifico, similar a una lista de clientes de la cual los bancos obtienen el capital con base en el total de los fondos de sus "clientes" */
 	ArrayList<Usuario> misUsuarios = new ArrayList<Usuario>();
 	
 	
@@ -36,23 +36,13 @@ public class Bancos {
 	
 	public Bancos (String idB) {
 		this.idBanco = idB;
+		Parameters params = RunEnvironment.getInstance().getParameters();
+		this.resExe = params.getDouble("resExe");
+		this.resReq = params.getDouble("resReq");
 
 	}
-	/** 
-	 * Metodo que determina el stock de fondos con los que el banco forma su capital con base en la suma de fondos que sus clientes depositan
-	 */
-	  public void setCapital(){
-		  this.capital =0;
-		  for (Usuario miAgente: misUsuarios){
-			  double c = (miAgente.fondos);
-	/**  
-	 * Extarer los fondos de la clase Usuario para usar en la clase Bancos
-	 */
-			  this.capital += c;   
-		  }
-		 //TODO: Corroborar  que el metodo realmente suma los fondos de cada elemento dentro del AL de cada banco
+
 	
-	  }
 	  /**
 	   * Metodo para que los agentes se informen si su banco tiene reservas suficientes para honrar su depositos
 	   */
@@ -65,13 +55,15 @@ public class Bancos {
 					  miAgente.retiro = true;
 		  }
 			  }
-		  //TODO: resolver como hcaer una señalizacion de que el banco ha quebrado y ya no opera para ninguno de sus usuarios
+		  //TODO: resolver como hacer una señalizacion de que el banco ha quebrado y ya no opera para ninguno de sus usuarios
 	 }
 	 /** 
 	  * Metodo para cerrar un banco cuando se vuelve iliquido y no tiene fondos suficientes para honrar ninguno de los depositos
 	  */
 	  public void cerrar() { 
-		  for (Usuario miAgente: misUsuarios)
+		  if (this.resTot <= 0){
+			  this.iliquido = true;
+		  }
 	  {       //cerrar el banco 
 		  //cambiar forma imagen o color del banco
 	  }
@@ -89,14 +81,14 @@ public class Bancos {
  
  /** Schedule method para que el banco determine su stock de capital con el cual operara */
  
- @ScheduledMethod (start=1, interval=1, shuffle=true,priority=100)
+ @ScheduledMethod (start=0, interval=0, shuffle=true,priority=100)
  	public void abrirBanco() {
-	 if(this.k==1) { // aca realizamos esto unicamente en el primer tick debido a que es el inicio de la especulacion
-			setCapital();
-		}
-		this.k++;
+	  // aca realizamos esto unicamente en el primer tick debido a que es el inicio de la especulacion
+		 this.resTot = (this.capital *(this.resExe + this.resReq));
+		System.out.printf("El banco %s tiene %s en sus reservas totales inicialemnte\n", this.idBanco, this.resTot);
+	
  }
-}
+ }
 
 
 	  	

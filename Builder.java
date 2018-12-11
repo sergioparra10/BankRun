@@ -59,7 +59,7 @@ public class Builder implements ContextBuilder<Object>{
 		 * Por el momento estableceremos el numero de usuarios en miMundo a 100,
 		 *  pero es un parametro ajustable por el el usuario en el modelo.
 		 */
-		int usuarioCount = 100;
+		int usuarioCount = params.getInteger("maxUsuarios");
 		/**
 		 * Mediante este ArrayList definimos a la poblacion que vive en el modelo, es decir, es una lista
 		 * que guarda a todos los usuarios.

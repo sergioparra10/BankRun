@@ -36,9 +36,9 @@ public class Usuario {
 	int t ;
 	/** Variable que le permite al usuario del modelo determinar el total de agentes tipo Usuario en el espacio */
 	//int maxUsuarios;
-	/** ArrayList de la clase Usuario en la cual cada agente alamacernra a aquellos agentes que forman parte de su "red social" */
+	/** ArrayList de la clase Usuario en la cual cada agente alamacenara a aquellos agentes que forman parte de su "red social" */
 	ArrayList<Usuario> miRed = new ArrayList<Usuario>();  //movamos la variable de instancia arriba
-	/** ArrayList de la clase Bancos en la cual cada banco almacena a los agentes tipo Usuario que forman parte de su red de "clientes" que han depositado sus fondos en el y que pueden realizar retiros */
+	/** ArrayList de la clase Bancos que cada agente tipo Banco utiliza para identificar a los agentes tipo Usuario con los que esta relacionado*/
 	ArrayList<Bancos> misUsuarios;
 	
 	
@@ -55,8 +55,6 @@ public class Usuario {
 		Parameters params = RunEnvironment.getInstance().getParameters();
 		/** Umbral que define si el usuario retira o no con base en las señales que ya recibio) */
 		int maxUmbral=params.getInteger("maxUmbral");
-		/** El numero total de Usuarios en el modelo*/
-		int maxUsuarios=params.getInteger("maxUsuarios");
 		/** Numero de Usuarios especuldores que hay en el modelo*/
 		int nEspecular=params.getInteger("nEspecular");
 		/** Numero aleatorio que define el numero maximo de señales malaas que lo hacen retirar*/
@@ -65,8 +63,9 @@ public class Usuario {
 		/** Indicar que solamente en el primer tick se definen especuladores */ 
 		this. t =1;
 		this.especular = false;
-		if(this.idUsuario<nEspecular) {
+		if(this.idUsuario<nEspecular+1) {
 			this.especular=true;
+			System.out.printf("el usuario %s es especulador\n ", this.idUsuario);
 		}
 		this.fondos = misFondos();  //ventaja, si queremos cambiar la distribucion lo hacemos desde aqui
 		bank.misUsuarios.add(this);
@@ -79,6 +78,36 @@ public class Usuario {
 		return RandomHelper.createChiSquare(3).nextDouble() + 1;   //creamos distribución chi, así arroja el número                                            //aqui no va este metodo, solo el return, lo demas va en el constructor
 	}
 	
+	/** Metodo de conteo para el numero de retiros dentro del sistema (para serie de tiempo en GUI)*/
+	public int wCount() {
+		int wc = 0;
+		if (this.retiro == true) {
+			//System.out.printf("El usuario %s ha retirado sus fondos del banco %s \n", this.idUsuario, miBanco.idBanco);
+			//System.out.printf("El usuario %s tiene %s fondos \n",this.idUsuario, this.fondos);
+			wc++;
+		}
+		return wc;
+	}
+	
+	/**Metodo de conteo para el numero de agentes que no pudieron retirar sus fondos del banco (pra serie de tiempo en GUI) */
+	public int aCount() {
+		int ac =0;
+		if(this.alarm == true) {
+			ac++;
+		}
+		return ac;
+	}
+	
+	//TODO: Encontrar una forma de hacer un conteo de las veces que cada agente ejecuta un metodo - envio de señales
+	
+	/** Metodo de conteo para el numero de agentes  
+	public int sCount() {
+		int sc =0;
+		if () {
+			
+		}
+	}
+	*/
 	
 	/** Método para determinar que usuario será el que siembre la semilla de especulacion en el modelo */
 	
@@ -111,14 +140,14 @@ public class Usuario {
 			if(amigo.retiro == true) {
 				if(this.miBanco == amigo.miBanco) {
 					if (amigo.alarm == true) {
-						this.paciencia += (0.2 * maxUmbral); //TODO fijar una proporcion del maximo de umbral como valor de cada tipo de señal
+						this.paciencia += (0.3 * maxUmbral); //TODO fijar una proporcion del maximo de umbral como valor de cada tipo de señal
 					}
 					else { this.paciencia -= (0.2 * maxUmbral);
 				} 
 					}
 					else  { // ya no es es el mismo banco
 						if (amigo.alarm == true) {
-						this.paciencia += (0.1 * maxUmbral); //TODO fijar una proporcion del maximo de umbral como valor de cada tipo de señal
+						this.paciencia += (0.15 * maxUmbral); //TODO fijar una proporcion del maximo de umbral como valor de cada tipo de señal
 					}
 					else { this.paciencia -= (0.1 * maxUmbral);
 				        }
@@ -128,12 +157,13 @@ public class Usuario {
 				
 		}
 	}
-	
+	/** Metodo que determina las reservas totales del Banco al que esta vinculado cada agente tipo Usuario que puede cambiar si retira sus fondos de las reservas del banco  */
 	public double setReservas() {
-		miBanco.resTot = miBanco.resTot - this.fondos; // tal vez innecesario
+		miBanco.resTot = miBanco.resTot - this.fondos;
 		return miBanco.resTot;
 	}
 	
+	/** Metodo que regresa el ID de cada agente tipo Usuario que permite mostrarlo como label de cada agente en el GUI */
 	public int getId() {
 		return this.idUsuario;
 	}
@@ -154,15 +184,25 @@ public class Usuario {
 		this.retiro = true;
 			if(miBanco.resTot < this.fondos) {
 				this.alarm = true;
+				System.out.printf("El usuario %s intento retirar sus fondos del banco %s pero no habia reservas suficientes su retiro es de %s\n", this.idUsuario, miBanco.idBanco, this.fondos);
+				System.out.println("//////////////////////////////////////////////////////////////////////////////////////////////");
+				System.out.printf("Las reserva totales del banco %s al que pertence el usuario %s son %s  \n", miBanco.idBanco, this.idUsuario, this.fondos);
+				System.out.println("----------------------------------------------------------------------------");
 				miBanco.resTot = 0;
-				this.fondos= 0;
+				this.fondos = 0;
 				miBanco.liquidar();
+				
 			}
 			else {
 				miBanco.resTot -= this.fondos;
-				this.fondos= 0;
+				System.out.printf("El usuario %s tiene %s fondos y pertenece al banco %s\n", this.idUsuario, this.fondos, miBanco.idBanco);
+				System.out.printf("El usuario %s ha retirado sus fondos del banco %s y sus retiro fue de %s \n", this.idUsuario, miBanco.idBanco, this.fondos);
+				System.out.printf("Los fondos del banco %s son %s\n", miBanco.idBanco, miBanco.resTot);
+				System.out.println("------------------------------------------------------------------------------");
+				this.fondos = 0;
 			}
 	}
+	
 	getSignal();
 	
 	}
