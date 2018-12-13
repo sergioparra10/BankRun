@@ -1,5 +1,13 @@
 package bankRuns;
 
+/** Modelo Bankruns especulativos en una red social aleatoria*/
+/**Autores: Pedro Guerrero, Luis Miguel Orozco, Andrea Parra & Sergio Parra */
+/** Proyecto Final */
+/** Introduction to Programming and Agent-based modelling*/
+/** Profesor Florian Chavez-Juarez*/
+/** Invierno 2018 */
+/** CIDE */
+
 /**  Clase en la cual se definen las acciones y caracteristicas de los bancos. */
 
 import java.util.ArrayList;
@@ -13,19 +21,15 @@ public class Bancos {
 	/** Variable (String) para tener un identificador de cada uno de los bancos*/
 	String idBanco;
 	/** Variable (double) la tasa de reservas requeridas de los bancos*/
-	double resReq = 0.03;
+	double resReq;
 	/** Variable (double) para el exedente de reservas */
-	double resExe = 0.1;
+	double resExe;
 	/** Variable (double) es la suma de las reservas requeridas y el exedente */
-	double resTot = (this.capital *(this.resExe + this.resReq));
+	double resTot ;
 	/** Variable (double) para el capital de cada banco (depositos que hacen los usuarios) */
 	double capital;
 	/** Variable (boolean) que indica si el banco tiene o no dinero */
 	boolean iliquido;
-	/** Variable de la clase Usuario para la dotacion inicial del agente que posteriormente depositara en su banco */
-	public Usuario fondos;
-	/** Variable de la clase Usuario que indica si el agente ya ha retirado sus depositos del banco (retiro = true)  y que posteriormente determinara la señal que tranamitida a su red */
-	public Usuario retiro;
 	/** Variable (int) de conteo del numero de tick en el modelo */
 	int k =1; 
 	/** ArraYList de la clase Bancos que almacena al conjunto de agentes tipo Usuario que estan vinculados a un banco en especifico, similar a una lista de clientes de la cual los bancos obtienen el capital con base en el total de los fondos de sus "clientes" */
@@ -36,6 +40,7 @@ public class Bancos {
 	
 	public Bancos (String idB) {
 		this.idBanco = idB;
+		this.resTot = (this.capital *(this.resExe + this.resReq));
 		Parameters params = RunEnvironment.getInstance().getParameters();
 		this.resExe = params.getDouble("resExe");
 		this.resReq = params.getDouble("resReq");
@@ -43,9 +48,7 @@ public class Bancos {
 	}
 
 	
-	  /**
-	   * Metodo para que los agentes se informen si su banco tiene reservas suficientes para honrar su depositos
-	   */
+	  /** Metodo para que los agentes se informen de que su banco no tiene reservas suficientes para honrar su depositos y además cierra el banco para  */
 	  public void liquidar() { //ambos dentro de un schedule method
 			  if(this.resTot <= 0) {
 				  this.iliquido = true;
@@ -57,18 +60,6 @@ public class Bancos {
 			  }
 		  //TODO: resolver como hacer una señalizacion de que el banco ha quebrado y ya no opera para ninguno de sus usuarios
 	 }
-	 /** 
-	  * Metodo para cerrar un banco cuando se vuelve iliquido y no tiene fondos suficientes para honrar ninguno de los depositos
-	  */
-	  public void cerrar() { 
-		  if (this.resTot <= 0){
-			  this.iliquido = true;
-		  }
-	  {       //cerrar el banco 
-		  //cambiar forma imagen o color del banco
-	  }
-	 }
-//TODO checar si son necesarios estos metodos
  public double getReservas() {
 	 return this.resTot;
  }
@@ -79,24 +70,22 @@ public class Bancos {
 	 return this.idBanco;
  }
  
+ //TODO: pasar el metodo abrir banco al builder
+ 
  /** Schedule method para que el banco determine su stock de capital con el cual operara */
  
  @ScheduledMethod (start=0, interval=0, shuffle=true,priority=100)
  	public void abrirBanco() {
-	  // aca realizamos esto unicamente en el primer tick debido a que es el inicio de la especulacion
-		 this.resTot = (this.capital *(this.resExe + this.resReq));
+	 	 this.resTot = (this.capital *(this.resExe + this.resReq));
 		System.out.printf("El banco %s tiene %s en sus reservas totales inicialemnte\n", this.idBanco, this.resTot);
 	
  }
+ 
+/** public void cerrar() {
+	 if(this.resTot = 0) {
+		 this.iliquido = true;
+	 }
+ } */
+ 
  }
 
-
-	  	
-// Método para cerrar el banco
-	
-	/**
-	 * public void () {
-	 * 
-	 * 	for (iliquido = true){
-	 * 		Cambiar el color del banco una vez que haya quebrado}}
-	 */
