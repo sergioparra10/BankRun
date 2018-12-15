@@ -61,8 +61,8 @@ public class Usuario {
 		this.especular = false;
 		if(this.idUsuario<nEspecular+1) {
 			this.especular=true;
-			System.out.printf("el usuario %s es especulador en el periodo %s\n ", this.idUsuario, this.t);
-			System.out.println("*******************************************************************************************");
+			//System.out.printf("el usuario %s es especulador en el periodo %s\n ", this.idUsuario, this.t);
+			//System.out.println("*******************************************************************************************");
 			}
 		this.fondos = misFondos();  //ventaja, si queremos cambiar la distribucion lo hacemos desde aqui
 		bank.misUsuarios.add(this);
@@ -91,7 +91,7 @@ public class Usuario {
 		}
 		return ac;
 	}
-	
+
  //TODO: encontrar una forma de contar las veces que se envia la señal y de preferncia vincularla con el receptor y emisor
 	
 	/** Método para determinar que usuario será el que siembre la semilla de especulacion en el modelo */
@@ -100,9 +100,9 @@ public class Usuario {
 			this.alarm = true; // artificialmente el individuo no recibe sus fondos por tanto se "alarma" y transmite esto en la señal
 			this.retiro = true;
 			miBanco.resTot -= this.fondos; // el usuario retira sus fondos a pesar de que se alarma artificialmente, es como si mintiera sobre el estado de los fundamentos del banco
-			System.out.printf("El especulador numero %s retiro %s del banco %s en el periodo %s\n", this.idUsuario, this.fondos, miBanco.idBanco, (this.t)-1);
-			System.out.printf("Su banco %s tiene %s de reservas totales actualmente\n", miBanco.idBanco, miBanco.resTot);
-			System.out.println("==========================================================================================");
+			//System.out.printf("El especulador numero %s retiro %s del banco %s en el periodo %s\n", this.idUsuario, this.fondos, miBanco.idBanco, (this.t)-1);
+			//System.out.printf("Su banco %s tiene %s de reservas totales actualmente\n", miBanco.idBanco, miBanco.resTot);
+			//System.out.println("==========================================================================================");
 			this.fondos=0;
 		}
 		
@@ -165,10 +165,10 @@ public class Usuario {
 		this.retiro = true;
 			if(miBanco.resTot < this.fondos) {
 				this.alarm = true;
-				System.out.printf("El usuario %s intento retirar sus fondos del banco %s pero no habia reservas suficientes su retiro es de %s en el periodo %s\n", this.idUsuario, miBanco.idBanco, this.fondos, (this.t)-1);
-				System.out.println("//////////////////////////////////////////////////////////////////////////////////////////////");
-				System.out.printf("Las reserva totales del banco %s al que pertence el usuario %s son %s  \n", miBanco.idBanco, this.idUsuario, this.fondos);
-				System.out.println("----------------------------------------------------------------------------");
+				//System.out.printf("El usuario %s intento retirar sus fondos del banco %s pero no habia reservas suficientes su retiro es de %s en el periodo %s\n", this.idUsuario, miBanco.idBanco, this.fondos, (this.t)-1);
+				//System.out.println("//////////////////////////////////////////////////////////////////////////////////////////////");
+				//System.out.printf("Las reserva totales del banco %s al que pertence el usuario %s son %s  \n", miBanco.idBanco, this.idUsuario, this.fondos);
+				//System.out.println("----------------------------------------------------------------------------");
 				miBanco.resTot = 0;
 				this.fondos = 0;
 				miBanco.liquidar();
@@ -176,10 +176,10 @@ public class Usuario {
 			}
 			else {
 				miBanco.resTot -= this.fondos;
-				System.out.printf("El usuario %s tiene %s fondos y pertenece al banco %s\n", this.idUsuario, this.fondos, miBanco.idBanco);
-				System.out.printf("El usuario %s ha retirado sus fondos del banco %s y sus retiro fue de %s en el periodo %s \n", this.idUsuario, miBanco.idBanco, this.fondos, (this.t)-1);
-				System.out.printf("Los fondos del banco %s son %s\n", miBanco.idBanco, miBanco.resTot);
-				System.out.println("------------------------------------------------------------------------------");
+				//System.out.printf("El usuario %s tiene %s fondos y pertenece al banco %s\n", this.idUsuario, this.fondos, miBanco.idBanco);
+				//System.out.printf("El usuario %s ha retirado sus fondos del banco %s y sus retiro fue de %s en el periodo %s \n", this.idUsuario, miBanco.idBanco, this.fondos, (this.t)-1);
+				//System.out.printf("Los fondos del banco %s son %s\n", miBanco.idBanco, miBanco.resTot);
+				//System.out.println("------------------------------------------------------------------------------");
 				this.fondos = 0;
 			}
 	}

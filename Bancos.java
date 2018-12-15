@@ -77,7 +77,7 @@ public class Bancos {
  @ScheduledMethod (start=0, interval=0, shuffle=true,priority=100)
  	public void abrirBanco() {
 	 	 this.resTot = (this.capital *(this.resExe + this.resReq));
-		System.out.printf("El banco %s tiene %s en sus reservas totales inicialemnte\n", this.idBanco, this.resTot);
+		//System.out.printf("El banco %s tiene %s en sus reservas totales inicialemnte\n", this.idBanco, this.resTot);
 	
  }
  

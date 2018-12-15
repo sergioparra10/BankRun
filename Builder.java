@@ -96,7 +96,7 @@ public class Builder implements ContextBuilder<Object>{
 		 * Esta red es la base para esparcir o no algun rumor sobre el estatus de los bancos. */
 		for (Usuario finder: miPoblacion) {
 			double propConect = RandomHelper.nextDoubleFromTo(minConect, maxConect);
-			System.out.printf("el intervalos de conectividad es %s - %s\n", minConect, maxConect);
+			//System.out.printf("el intervalos de conectividad es %s - %s\n", minConect, maxConect);
 			for (Usuario candidato: miPoblacion){
 				if (propConect > RandomHelper.nextDoubleFromTo(0, 1)) {
 					/**  Esta condicion elimina el escenario en donde un agente se repita dentro de una misma red social. */
@@ -106,6 +106,15 @@ public class Builder implements ContextBuilder<Object>{
 					}
 				}
 			}
+		}
+		
+		
+		if(RunEnvironment.getInstance().isBatch()){
+		RunEnvironment.getInstance().endAt(100);
+		}
+		else {
+			
+			RunEnvironment.getInstance().pauseAt(25);
 		}
 		
 	
